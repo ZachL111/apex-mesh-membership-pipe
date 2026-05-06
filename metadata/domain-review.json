@@ -1,0 +1,73 @@
+{
+  "repo": "apex-mesh-membership-pipe",
+  "language": "SQL",
+  "category": "Distributed systems",
+  "goal": "Implement an SQL distributed systems project for membership simulation kernel, using seeded input scenarios and deterministic summary checks.",
+  "review_model": {
+    "terms": [
+      "quorum health",
+      "lease drift",
+      "replica lag",
+      "membership churn"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "quorum health",
+      "signal": 46,
+      "slack": 52,
+      "drag": 31,
+      "confidence": 80,
+      "score": 131,
+      "lane": "watch"
+    },
+    {
+      "name": "stress",
+      "focus": "lease drift",
+      "signal": 54,
+      "slack": 32,
+      "drag": 29,
+      "confidence": 53,
+      "score": 106,
+      "lane": "watch"
+    },
+    {
+      "name": "edge",
+      "focus": "replica lag",
+      "signal": 57,
+      "slack": 53,
+      "drag": 10,
+      "confidence": 72,
+      "score": 209,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "membership churn",
+      "signal": 70,
+      "slack": 33,
+      "drag": 26,
+      "confidence": 89,
+      "score": 184,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "quorum health",
+      "signal": 75,
+      "slack": 29,
+      "drag": 20,
+      "confidence": 81,
+      "score": 200,
+      "lane": "ship"
+    }
+  ]
+}

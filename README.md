@@ -1,68 +1,40 @@
 # apex-mesh-membership-pipe
 
-`apex-mesh-membership-pipe` treats distributed systems as a local verification problem. The SQL implementation is intentionally narrow, but the fixtures and notes make the behavior explicit.
+`apex-mesh-membership-pipe` explores distributed systems with a small SQL codebase and local fixtures. The technical goal is to implement an SQL distributed systems project for membership simulation kernel, using seeded input scenarios and deterministic summary checks.
 
-## Apex Mesh Membership Pipe Checkpoints
+## Purpose
 
-Treat the compact fixture as the contract and the extended examples as a scratchpad. The code should stay boring enough that a change in behavior is obvious from the test output.
+The project exists to keep a narrow engineering decision visible and testable. For this repo, that decision is how quorum health and replica lag should influence a review result.
 
-## Architecture Notes
+## Apex Mesh Membership Pipe Review Notes
 
-The design is intentionally direct: parse or construct a signal, score it, classify it, and verify the expected branch. This makes the repository useful for studying distributed systems behavior without needing a service or database unless the language project itself is SQL. The SQL project uses sqlite fixtures, views, and assertions to keep query behavior inspectable.
+The first comparison I would make is `replica lag` against `lease drift` because it shows where the rule is most opinionated.
 
-## What This Is For
+## What Is Covered
 
-The repository exists to keep a technical idea small enough to reason about. The implementation avoids external dependencies where possible, then uses fixtures to make changes easy to review.
+- `fixtures/domain_review.csv` adds cases for quorum health and lease drift.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/apex-mesh-membership-walkthrough.md` walks through the case spread.
+- The SQL code includes a review path for `replica lag` and `lease drift`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Useful Pieces
+## Implementation Notes
 
-- Uses fixture data to keep quorum behavior changes visible in code review.
-- Includes extended examples for lease timing, including `surge` and `degraded`.
-- Documents message ordering tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
+The repository has two validation layers: the original compact policy fixture and the domain review fixture. They are separate so one can change without hiding failures in the other.
 
-## Case Study
+The SQL checks add a separate view over the domain review fixture.
 
-The extended cases are not random smoke tests. `degraded` keeps pressure on the review path, while `surge` shows the model when capacity and weight are strong enough to clear the threshold.
-
-## Project Layout
-
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-- `schema.sql`: sqlite schema and view definitions
-
-## Tooling
-
-Use a normal shell with SQL available on `PATH`. The verifier is written as a PowerShell script because the portfolio was assembled on Windows.
-
-## Local Workflow
+## Command
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Audit Path
 
-## Quality Gate
+The verifier is intentionally local. It should fail if the fixture score math, lane assignment, or language-specific test drifts.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+## Limits
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Scope
-
-This code is local-first. It makes no claim about deployed usage and avoids credentials, hosted state, and environment-specific setup.
-
-## Expansion Ideas
-
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add one more distributed systems fixture that focuses on a malformed or borderline input.
+The fixture set is small enough to audit by hand. The next useful expansion is malformed input coverage, not extra surface area.
