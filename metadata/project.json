@@ -1,0 +1,32 @@
+{
+  "index": 334,
+  "phase": 2,
+  "batch": 38,
+  "name": "apex-mesh-membership-pipe",
+  "planned_name": "apex-mesh-membership-pipe",
+  "language": "SQL",
+  "category": "Distributed systems",
+  "goal": "Implement an SQL distributed systems project for membership simulation kernel, using seeded input scenarios and deterministic summary checks.",
+  "repository_url": "https://github.com/ZachL111/apex-mesh-membership-pipe",
+  "verification_command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1",
+  "model": {
+    "inputs": [
+      "demand",
+      "capacity",
+      "latency",
+      "risk",
+      "weight"
+    ],
+    "threshold": 171,
+    "risk_penalty": 4,
+    "latency_penalty": 2,
+    "weight_bonus": 2,
+    "decision_rule": "accept when score is greater than or equal to threshold, otherwise review"
+  },
+  "quality_gates": [
+    "readme constraint scan",
+    "fixture presence check",
+    "metadata JSON parse",
+    "language verifier"
+  ]
+}
