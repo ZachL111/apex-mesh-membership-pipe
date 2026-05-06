@@ -1,0 +1,17 @@
+{
+  "repo": "apex-mesh-membership-pipe",
+  "thresholds": {
+    "signal": 3,
+    "slack": 2,
+    "confidence": 2,
+    "drag": 5,
+    "ship": 199,
+    "watch": 118
+  },
+  "terms": [
+    "quorum health",
+    "lease drift",
+    "replica lag",
+    "membership churn"
+  ]
+}
